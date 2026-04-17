@@ -26,13 +26,18 @@ A stunning, fully interactive **Titanic Survival Analytics Dashboard** built wit
 
 ```
 titanic-analysis/
-├── index.html          # 🏠 Dashboard homepage (KPIs + Charts)
-├── predict.html        # 🔮 Survival prediction page
-├── style.css           # 🎨 Master stylesheet (Nautical theme)
-├── main.js             # 📊 Dashboard charts & KPI counters
-├── predict.js          # 🧠 Prediction logic & form handler
-├── titanic_bg.png      # 🌊 Titanic ship background image
-└── README.md           # 📖 This file
+├── src/                         # 📦 All source files
+│   ├── index.html               # 🏠 Dashboard homepage (KPIs + Charts)
+│   ├── predict.html             # 🔮 Survival prediction page
+│   ├── style.css                # 🎨 Master stylesheet (Nautical theme)
+│   ├── main.js                  # 📊 Dashboard charts & KPI counters
+│   ├── predict.js               # 🧠 Prediction logic & form handler
+│   └── titanic_bg.png           # 🌊 Titanic ship background image
+├── .github/
+│   └── workflows/
+│       └── deploy.yml           # 🚀 GitHub Actions — auto deploy to Pages
+├── .gitignore
+└── README.md                    # 📖 This file
 ```
 
 ---
