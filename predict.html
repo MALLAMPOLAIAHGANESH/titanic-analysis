@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Titanic Survival Predictor — Enter passenger details to predict survival probability using AI." />
+  <title>🔮 Titanic Survival Predictor</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="predict.js" defer></script>
+</head>
+
+<body>
+
+  <div class="ocean-bg"></div>
+
+  <!-- ── Navbar ───────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <div class="nav-brand">
+      <span class="brand-icon">🚢</span>
+      <span>Titanic<span class="accent">Analytics</span></span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" id="navDashboard">⚓ Dashboard</a></li>
+      <li><a href="predict.html" class="active" id="navPredict">🔮 Predict</a></li>
+      <li><a href="index.html#about" id="navAbout">📖 About</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────── -->
+  <header class="hero predict-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-badge">🔮 AI-Powered Survival Prediction</div>
+    <h1>Would <span class="gradient-text">You Survive?</span></h1>
+    <p class="subtitle">Enter your passenger details to predict your chances of survival aboard the RMS Titanic.</p>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#050a1e" />
+      </svg>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="predict-layout">
+
+        <!-- ── Form Card ─────────────────────────── -->
+        <div class="glass-card form-card reveal" id="formCard">
+          <h2 class="form-title">🎟️ Passenger Details</h2>
+          <p class="form-subtitle">Fill in the fields below — we'll predict your fate on April 14, 1912</p>
+
+          <form id="predictForm" autocomplete="off" novalidate>
+            <div class="form-grid">
+
+              <!-- Ticket Class -->
+              <div class="form-group">
+                <label class="form-label" for="pclass">🎟️ Ticket Class</label>
+                <select class="form-control" id="pclass" name="pclass" required>
+                  <option value="">Select class…</option>
+                  <option value="1">1st Class — Upper Deck</option>
+                  <option value="2">2nd Class — Middle Deck</option>
+                  <option value="3">3rd Class — Lower Deck</option>
+                </select>
+              </div>
+
+              <!-- Gender -->
+              <div class="form-group">
+                <label class="form-label" for="gender">🚻 Gender</label>
+                <select class="form-control" id="gender" name="gender" required>
+                  <option value="">Select gender…</option>
+                  <option value="female">👩 Female</option>
+                  <option value="male">👨 Male</option>
+                </select>
+              </div>
+
+              <!-- Age Slider -->
+              <div class="form-group full">
+                <label class="form-label" for="age">🎂 Age</label>
+                <div class="slider-wrap">
+                  <span class="range-value" id="ageDisplay">29</span>
+                  <input class="range-slider" type="range" id="age" name="age" min="1" max="80" value="29"
+                    aria-label="Passenger Age" />
+                </div>
+              </div>
+
+              <!-- Fare -->
+              <div class="form-group">
+                <label class="form-label" for="fare">💵 Fare (£)</label>
+                <input class="form-control" type="number" id="fare" name="fare" min="0" max="600"
+                  placeholder="e.g. 32.50" required />
+              </div>
+
+              <!-- Embarked -->
+              <div class="form-group">
+                <label class="form-label" for="embarked">⚓ Port of Embarkation</label>
+                <select class="form-control" id="embarked" name="embarked" required>
+                  <option value="">Select port…</option>
+                  <option value="S">Southampton 🇬🇧</option>
+                  <option value="C">Cherbourg 🇫🇷</option>
+                  <option value="Q">Queenstown 🇮🇪</option>
+                </select>
+              </div>
+
+              <!-- Siblings / Spouse -->
+              <div class="form-group">
+                <label class="form-label" for="sibSp">👨‍👩‍👧 Siblings / Spouse</label>
+                <input class="form-control" type="number" id="sibSp" name="sibSp" min="0" max="8" value="0"
+                  placeholder="0" />
+              </div>
+
+              <!-- Parents / Children -->
+              <div class="form-group">
+                <label class="form-label" for="parCh">👨‍👩‍👦 Parents / Children</label>
+                <input class="form-control" type="number" id="parCh" name="parCh" min="0" max="6" value="0"
+                  placeholder="0" />
+              </div>
+
+              <!-- Title -->
+              <div class="form-group">
+                <label class="form-label" for="title">🎩 Title / Honorific</label>
+                <select class="form-control" id="title" name="title">
+                  <option value="">Select title…</option>
+                  <option value="Mr">Mr</option>
+                  <option value="Mrs">Mrs</option>
+                  <option value="Miss">Miss</option>
+                  <option value="Master">Master</option>
+                  <option value="Dr">Dr</option>
+                  <option value="Rev">Rev</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+            </div><!-- /form-grid -->
+
+            <button class="btn-predict" type="submit" id="predictBtn">
+              <span>⛵ Predict My Survival</span>
+            </button>
+          </form>
+        </div><!-- /form-card -->
+
+        <!-- ── Result Card ────────────────────────── -->
+        <div class="glass-card result-card reveal" id="resultCard">
+
+          <!-- Placeholder state -->
+          <div class="result-placeholder" id="resultPlaceholder">
+            <div class="ph-icon">🌊</div>
+            <p>Fill in the passenger details and press<br /><strong>Predict My Survival</strong> to see your fate.</p>
+          </div>
+
+          <!-- Result state (hidden by default) -->
+          <div id="resultContent" style="display:none;">
+
+            <!-- Verdict -->
+            <div class="result-verdict" id="resultVerdict">
+              <span class="verdict-icon" id="verdictIcon"></span>
+              <div class="verdict-text" id="verdictText"></div>
+              <div class="verdict-subtitle" id="verdictSubtitle"></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Confidence Score -->
+            <div class="confidence-section">
+              <div class="confidence-label">
+                <span>Survival Probability</span>
+                <span id="confidencePct">0%</span>
+              </div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="confidenceBar"></div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Feature Importance -->
+            <div class="feature-importance">
+              <div class="feature-title">📊 Feature Importance</div>
+              <div id="featureBars">
+                <!-- injected by JS -->
+              </div>
+            </div>
+
+            <!-- New prediction -->
+            <button class="btn-predict" id="resetBtn" type="button"
+              style="margin-top:1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(0,200,255,0.15)); color: var(--ice-white);">
+              <span>🔄 Try Another Passenger</span>
+            </button>
+
+          </div><!-- /resultContent -->
+
+        </div><!-- /result-card -->
+
+      </div><!-- /predict-layout -->
+    </section>
+
+    <!-- ── Historical Tips ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title"><span class="icon">💡</span>Historical Survival Insights</h2>
+      <p class="section-subtitle">Key factors that influenced survival on the Titanic</p>
+
+      <div class="about-grid">
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">🎟️</span>
+          <h3>Class Matters</h3>
+          <p>1st class passengers had a 63% survival rate vs 24% in 3rd class. Proximity to lifeboats was decisive.</p>
+        </div>
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">👩</span>
+          <h3>Women First</h3>
+          <p>"Women and children first" — female passengers had a 74% survival rate vs 19% for males.</p>
+        </div>
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">🎂</span>
+          <h3>Youth Advantage</h3>
+          <p>Children under 10 had significantly higher survival rates. Age played a crucial role in boarding lifeboats.
+          </p>
+        </div>
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">💵</span>
+          <h3>Fare & Location</h3>
+          <p>Higher fares correlate with superior cabin locations and faster access to upper deck lifeboats.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>🚢 Titanic Analytics Dashboard · Built with ❤️ using <a href="https://www.chartjs.org/">Chart.js</a> · Dataset:
+      <a href="https://www.kaggle.com/c/titanic">Kaggle Titanic</a>
+    </p>
+    <p style="margin-top:0.35rem;">Developed by <strong>Ganesh</strong></p>
+    <div class="footer-links">
+      <a href="mailto:mallampolaiahganesh@gmail.com" title="Email">✉️ Email</a>
+      <a href="https://www.linkedin.com/in/mallampolaiah-ganesh" target="_blank" rel="noopener" title="LinkedIn">🔗
+        LinkedIn</a>
+      <a href="https://github.com/MALLAMPOLAIAHGANESH" target="_blank" rel="noopener" title="GitHub">🐙 GitHub</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">
+    <span id="toastIcon">✅</span><span id="toastMsg"></span>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Interactive Titanic Survival Dashboard — Explore survivor statistics, demographics, and predict survival probability using machine learning." />
+  <title>🚢 Titanic Survival Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+
+  <div class="ocean-bg"></div>
+
+  <!-- ── Navbar ───────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <div class="nav-brand">
+      <span class="brand-icon">🚢</span>
+      <span>Titanic<span class="accent">Analytics</span></span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active" id="navDashboard">⚓ Dashboard</a></li>
+      <li><a href="predict.html" id="navPredict">🔮 Predict</a></li>
+      <li><a href="#about" id="navAbout">📖 About</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────── -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-badge">⚓ Historical Data Analysis · 1912</div>
+    <h1>Titanic Survival<br /><span class="gradient-text">Dashboard</span></h1>
+    <p class="subtitle">Explore the stories of 891 passengers — who survived, who didn't, and what factors decided their
+      fate.</p>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#050a1e" />
+      </svg>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── KPI Section ───────────────────────────── -->
+    <section class="section">
+      <h2 class="section-title"><span class="icon">📊</span>Passenger Overview</h2>
+      <p class="section-subtitle">Key statistics from the RMS Titanic manifest — April 15, 1912</p>
+
+      <div class="kpi-grid" id="kpiGrid">
+        <!-- KPIs injected by JS -->
+      </div>
+    </section>
+
+    <!-- ── Charts Section ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title"><span class="icon">📈</span>Survival Analytics</h2>
+      <p class="section-subtitle">Breakdown of survival across class, gender, age, and embarkation port</p>
+
+      <div class="charts-grid">
+
+        <!-- Chart 1: Survival by Class -->
+        <div class="glass-card chart-card reveal">
+          <div class="chart-card-header">
+            <div class="chart-card-title">🎟️ Survival by Ticket Class</div>
+            <span class="chart-badge">BAR</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartClass" aria-label="Survival by Ticket Class"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Survived vs Not -->
+        <div class="glass-card chart-card reveal">
+          <div class="chart-card-header">
+            <div class="chart-card-title">🌊 Overall Survival Split</div>
+            <span class="chart-badge">DOUGHNUT</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartSurvival" aria-label="Overall Survival Split"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Survival by Gender -->
+        <div class="glass-card chart-card reveal">
+          <div class="chart-card-header">
+            <div class="chart-card-title">🚻 Survival by Gender</div>
+            <span class="chart-badge">BAR</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartGender" aria-label="Survival by Gender"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Age Distribution -->
+        <div class="glass-card chart-card reveal">
+          <div class="chart-card-header">
+            <div class="chart-card-title">🎂 Age Distribution</div>
+            <span class="chart-badge">LINE</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartAge" aria-label="Age Distribution of Passengers"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 5: Embarkation Port -->
+        <div class="glass-card chart-card reveal">
+          <div class="chart-card-header">
+            <div class="chart-card-title">⚓ Embarkation Port</div>
+            <span class="chart-badge">PIE</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartEmbarked" aria-label="Passengers by Embarkation Port"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 6: Fare Distribution -->
+        <div class="glass-card chart-card reveal">
+          <div class="chart-card-header">
+            <div class="chart-card-title">💵 Fare vs Survival</div>
+            <span class="chart-badge">RADAR</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartFare" aria-label="Fare Analysis"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── About Section ─────────────────────────── -->
+    <section class="section" id="about">
+      <h2 class="section-title"><span class="icon">📖</span>About This Project</h2>
+      <p class="section-subtitle">Built with modern web technologies and Machine Learning</p>
+
+      <div class="about-grid">
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">🧠</span>
+          <h3>ML Prediction</h3>
+          <p>Logistic Regression / Random Forest model trained on the famous Titanic dataset to predict survival
+            probability.</p>
+        </div>
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">📊</span>
+          <h3>Rich Analytics</h3>
+          <p>Interactive Chart.js visualizations covering survival by class, gender, age, embarked port, and fare range.
+          </p>
+        </div>
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">🌊</span>
+          <h3>Titanic Theme</h3>
+          <p>Immersive nautical design with glassmorphism cards, responsive layout, and subtle ocean-inspired
+            animations.</p>
+        </div>
+        <div class="glass-card about-card reveal">
+          <span class="a-icon">🚀</span>
+          <h3>Deployment Ready</h3>
+          <p>Flask backend with Docker containerization, deployable on Google Cloud Run for global accessibility.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────── -->
+  <footer>
+    <p>🚢 Titanic Analytics Dashboard · Built with ❤️ using <a href="https://www.chartjs.org/">Chart.js</a> · Dataset:
+      <a href="https://www.kaggle.com/c/titanic">Kaggle Titanic</a></p>
+    <p style="margin-top:0.35rem;">Developed by <strong>Ganesh</strong></p>
+    <div class="footer-links">
+      <a href="mailto:mallampolaiahganesh@gmail.com" title="Email">✉️ Email</a>
+      <a href="https://www.linkedin.com/in/mallampolaiah-ganesh" target="_blank" rel="noopener" title="LinkedIn">🔗 LinkedIn</a>
+      <a href="https://github.com/MALLAMPOLAIAHGANESH" target="_blank" rel="noopener" title="GitHub">🐙 GitHub</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">
+    <span id="toastIcon">✅</span><span id="toastMsg">Loading data…</span>
+  </div>
+
+</body>
+
+</html>
