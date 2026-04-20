@@ -941,3 +941,53 @@ footer a:hover { opacity: 0.8; }
 }
 
 .toast.show { transform: translateX(0); }
+
+/* ─── Feedback Tab ───────────────────────────────── */
+#feedbackTab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9998;
+
+  /* Vertical text */
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  rotate: 180deg;
+
+  /* Styling */
+  padding: 1.1rem 0.55rem;
+  background: linear-gradient(180deg, var(--cyan), var(--lifeboat));
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+
+  /* Glow shadow */
+  box-shadow: -3px 0 18px rgba(0,200,255,0.3);
+
+  /* Interactions */
+  cursor: pointer;
+  user-select: none;
+  transition: padding var(--t-fast), box-shadow var(--t-fast), filter var(--t-fast);
+
+  /* Subtle pulse to attract attention */
+  animation: fbPulse 3s ease-in-out infinite;
+}
+
+#feedbackTab:hover {
+  padding: 1.3rem 0.65rem;
+  box-shadow: -6px 0 28px rgba(0,200,255,0.55);
+  filter: brightness(1.1);
+  animation: none;
+}
+
+@keyframes fbPulse {
+  0%, 100% { box-shadow: -3px 0 18px rgba(0,200,255,0.3); }
+  50%       { box-shadow: -5px 0 26px rgba(0,200,255,0.55); }
+}
+
