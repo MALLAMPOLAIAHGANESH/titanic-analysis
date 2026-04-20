@@ -246,15 +246,27 @@
     <span id="toastIcon">✅</span><span id="toastMsg"></span>
   </div>
 
-  <!-- ── Feedback Tab ──────────────────────────────── -->
+  <!-- ── Feedback Tab ──────────────────────────────────── -->
   <a id="feedbackTab"
      href="https://forms.gle/k9i652f7BQGSChCW7"
      target="_blank"
      rel="noopener noreferrer"
      title="Share your feedback — Google Form"
      aria-label="Give Feedback">
-    ⚓ Feedback
+    <span class="fb-badge">NEW</span>
+    ⦳ Feedback
   </a>
+
+  <!-- Feedback Tooltip -->
+  <div id="feedbackTooltip" role="dialog" aria-label="Feedback prompt">
+    <button class="close-tip" id="closeFbTip" aria-label="Close">&#x2715;</button>
+    <strong>💬 Share Your Thoughts!</strong>
+    Help improve this predictor — takes only 30 seconds.
+    <a href="https://forms.gle/k9i652f7BQGSChCW7" target="_blank" rel="noopener"
+       style="display:block;margin-top:0.6rem;color:var(--cyan);font-weight:600;font-size:0.8rem;">
+      Open Feedback Form →
+    </a>
+  </div>
 
 </body>
 

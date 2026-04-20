@@ -12,7 +12,7 @@ function initScrollReveal() {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
@@ -279,7 +279,7 @@ function initForm() {
         survived ? '✅' : '💀',
         3000
       );
-    }, 1200);
+    }, 800);  // faster: was 1200ms
   });
 
   if (resetBtn) {
@@ -293,10 +293,42 @@ function initForm() {
   }
 }
 
-/* ── Init ────────────────────────────────────────── */
+/* ── Feedback Tooltip Auto-show ───────────────────── */
+function initFeedbackTooltip() {
+  const tip   = document.getElementById('feedbackTooltip');
+  const close = document.getElementById('closeFbTip');
+  const tab   = document.getElementById('feedbackTab');
+  if (!tip || !close || !tab) return;
+
+  const STORAGE_KEY = 'fbTipDismissed';
+  if (sessionStorage.getItem(STORAGE_KEY)) return;
+
+  const autoTimer = setTimeout(() => tip.classList.add('visible'), 8000);
+
+  close.addEventListener('click', (e) => {
+    e.preventDefault();
+    tip.classList.remove('visible');
+    sessionStorage.setItem(STORAGE_KEY, '1');
+    clearTimeout(autoTimer);
+  });
+
+  tab.addEventListener('click', () => {
+    tip.classList.remove('visible');
+    sessionStorage.setItem(STORAGE_KEY, '1');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!tip.contains(e.target) && e.target !== tab) {
+      tip.classList.remove('visible');
+    }
+  });
+}
+
+/* ── Init ─────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initNavbar();
   initSlider();
   initForm();
+  initFeedbackTooltip();
 });

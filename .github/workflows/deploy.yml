@@ -1,37 +1,145 @@
-name: Deploy to GitHub Pages
+# ════════════════════════════════════════════════════════════════
+#  🚢  TITANIC SURVIVAL DASHBOARD — Auto Deploy Pipeline
+#       Triggers: push to main  |  manual workflow_dispatch
+#       Deploys:  GitHub Pages (src/ folder)
+# ════════════════════════════════════════════════════════════════
+
+name: 🚀 Auto Deploy — Titanic Dashboard
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'src/**'          # only re-deploy when src/ files change
+      - '.github/workflows/deploy.yml'
 
+  workflow_dispatch:      # allows manual trigger from GitHub Actions tab
+    inputs:
+      reason:
+        description: 'Reason for manual deploy'
+        required: false
+        default: 'Manual trigger'
+
+# ── Permissions ───────────────────────────────────────────────
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# ── Concurrency: cancel in-flight deploys on new push ─────────
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: pages-deploy
+  cancel-in-progress: true
 
+# ══════════════════════════════════════════════════════════════
 jobs:
+
+  # ── Job 1: Validate & Build ──────────────────────────────────
+  build:
+    name: 🔍 Validate & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # full history for accurate change detection
+
+      # ── Print trigger info ─────────────────────────────────
+      - name: 📋 Deployment Info
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "  🚢  Titanic Dashboard — Auto Deploy"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "  Triggered by : ${{ github.actor }}"
+          echo "  Branch       : ${{ github.ref_name }}"
+          echo "  Commit SHA   : ${{ github.sha }}"
+          echo "  Commit msg   : ${{ github.event.head_commit.message }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "  Reason       : ${{ github.event.inputs.reason }}"
+          fi
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      # ── Verify required files exist ────────────────────────
+      - name: ✅ Verify required source files
+        run: |
+          echo "Checking required files in src/..."
+          REQUIRED=("src/index.html" "src/predict.html" "src/style.css" "src/main.js" "src/predict.js")
+          MISSING=0
+          for f in "${REQUIRED[@]}"; do
+            if [ -f "$f" ]; then
+              SIZE=$(wc -c < "$f")
+              echo "  ✅  $f  (${SIZE} bytes)"
+            else
+              echo "  ❌  MISSING: $f"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          if [ $MISSING -gt 0 ]; then
+            echo "❌ $MISSING required file(s) are missing. Aborting."
+            exit 1
+          fi
+          echo ""
+          echo "All required files present ✔"
+
+      # ── Quick HTML sanity check ────────────────────────────
+      - name: 🔎 HTML sanity check
+        run: |
+          echo "Running basic HTML checks..."
+          for f in src/index.html src/predict.html; do
+            # Check DOCTYPE
+            grep -qi '<!DOCTYPE html>' "$f" && echo "  ✅ DOCTYPE ok  — $f" || { echo "  ⚠️  Missing DOCTYPE in $f"; }
+            # Check charset
+            grep -qi 'charset' "$f" && echo "  ✅ charset ok  — $f" || { echo "  ⚠️  Missing charset in $f"; }
+            # Check viewport
+            grep -qi 'viewport' "$f" && echo "  ✅ viewport ok — $f" || { echo "  ⚠️  Missing viewport in $f"; }
+          done
+          echo "HTML checks complete ✔"
+
+      # ── List what will be deployed ─────────────────────────
+      - name: 📦 Show deployment bundle
+        run: |
+          echo "Files to be deployed from src/:"
+          ls -lh src/
+          echo ""
+          TOTAL=$(du -sh src/ | cut -f1)
+          echo "Total bundle size: $TOTAL"
+
+      # ── Configure GitHub Pages ─────────────────────────────
+      - name: ⚙️ Setup Pages
+        uses: actions/configure-pages@v5
+
+      # ── Upload src/ as Pages artifact ─────────────────────
+      - name: 📤 Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './src'
+
+  # ── Job 2: Deploy ────────────────────────────────────────────
   deploy:
+    name: 🌐 Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './src'   # Deploy from the src/ folder
-
-      - name: Deploy to GitHub Pages
+      - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # ── Post-deploy summary ────────────────────────────────
+      - name: 🎉 Deployment summary
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "  ✅  DEPLOYMENT SUCCESSFUL!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "  🌐  Live URL  : ${{ steps.deployment.outputs.page_url }}"
+          echo "  🚢  Dashboard : ${{ steps.deployment.outputs.page_url }}index.html"
+          echo "  🔮  Predictor : ${{ steps.deployment.outputs.page_url }}predict.html"
+          echo "  ⏱️  Deployed  : $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "  👤  By        : ${{ github.actor }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

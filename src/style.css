@@ -852,12 +852,12 @@ footer a:hover { opacity: 0.8; }
 
 /* ─── Animations ─────────────────────────────────── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-20px); }
+  from { opacity: 0; transform: translateY(-16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -866,11 +866,11 @@ footer a:hover { opacity: 0.8; }
   to   { opacity: 1; }
 }
 
-/* Scroll Reveal */
+/* Scroll Reveal — faster for snappier feel */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(28px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
 }
 .reveal.visible {
   opacity: 1;
@@ -973,21 +973,96 @@ footer a:hover { opacity: 0.8; }
   /* Interactions */
   cursor: pointer;
   user-select: none;
-  transition: padding var(--t-fast), box-shadow var(--t-fast), filter var(--t-fast);
+  transition: padding var(--t-fast), box-shadow var(--t-fast), filter var(--t-fast), transform var(--t-fast);
 
   /* Subtle pulse to attract attention */
-  animation: fbPulse 3s ease-in-out infinite;
+  animation: fbPulse 2.5s ease-in-out infinite;
 }
 
 #feedbackTab:hover {
-  padding: 1.3rem 0.65rem;
-  box-shadow: -6px 0 28px rgba(0,200,255,0.55);
-  filter: brightness(1.1);
+  padding: 1.4rem 0.7rem;
+  box-shadow: -8px 0 32px rgba(0,200,255,0.65);
+  filter: brightness(1.15);
   animation: none;
+  transform: translateY(-50%) translateX(-4px);
 }
 
 @keyframes fbPulse {
-  0%, 100% { box-shadow: -3px 0 18px rgba(0,200,255,0.3); }
-  50%       { box-shadow: -5px 0 26px rgba(0,200,255,0.55); }
+  0%, 100% { box-shadow: -3px 0 18px rgba(0,200,255,0.3); transform: translateY(-50%) translateX(0); }
+  50%       { box-shadow: -6px 0 28px rgba(255,107,43,0.6); transform: translateY(-50%) translateX(-3px); }
 }
+
+/* Live badge on feedback tab */
+#feedbackTab .fb-badge {
+  position: absolute;
+  top: -8px;
+  right: 50%;
+  transform: rotate(90deg) translateX(50%);
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.35rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  writing-mode: horizontal-tb;
+  rotate: 0deg;
+  animation: badgePop 1.5s ease-in-out infinite;
+  white-space: nowrap;
+  box-shadow: 0 0 10px rgba(255,23,68,0.6);
+  z-index: 1;
+}
+
+@keyframes badgePop {
+  0%, 100% { transform: rotate(90deg) translateX(50%) scale(1); opacity: 1; }
+  50%       { transform: rotate(90deg) translateX(50%) scale(1.15); opacity: 0.8; }
+}
+
+/* Feedback tooltip popup */
+#feedbackTooltip {
+  position: fixed;
+  right: 56px;
+  top: 50%;
+  transform: translateY(-50%) translateX(20px);
+  background: rgba(5,10,30,0.96);
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.2rem;
+  font-size: 0.82rem;
+  color: var(--ice-white);
+  backdrop-filter: blur(16px);
+  box-shadow: -4px 0 24px rgba(0,200,255,0.2);
+  z-index: 9997;
+  max-width: 200px;
+  line-height: 1.5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+#feedbackTooltip.visible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  pointer-events: auto;
+}
+
+#feedbackTooltip strong {
+  color: var(--cyan);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+#feedbackTooltip .close-tip {
+  position: absolute;
+  top: 6px; right: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0.5;
+  background: none;
+  border: none;
+  color: var(--ice-white);
+  line-height: 1;
+}
+#feedbackTooltip .close-tip:hover { opacity: 1; }
 

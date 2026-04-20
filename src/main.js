@@ -76,8 +76,8 @@ function renderKPIs() {
 function animateCounters() {
   document.querySelectorAll('.kpi-value[data-target]').forEach(el => {
     const target = +el.dataset.target;
-    const duration = 1800;
-    const step = 16;
+    const duration = 1100;  // faster: was 1800ms
+    const step = 14;
     const increment = target / (duration / step);
     let current = 0;
 
@@ -92,7 +92,7 @@ function animateCounters() {
   });
 }
 
-/* ── Scroll Reveal ───────────────────────────────── */
+/* ── Scroll Reveal ─────────────────────────────────── */
 function initScrollReveal() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -104,7 +104,7 @@ function initScrollReveal() {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.1 });  // lowered: triggers earlier
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
@@ -352,7 +352,42 @@ function initSlider(sliderId, displayId) {
   update();
 }
 
-/* ── Init ────────────────────────────────────────── */
+/* ── Feedback Tooltip Auto-show ───────────────────── */
+function initFeedbackTooltip() {
+  const tip   = document.getElementById('feedbackTooltip');
+  const close = document.getElementById('closeFbTip');
+  const tab   = document.getElementById('feedbackTab');
+  if (!tip || !close || !tab) return;
+
+  const STORAGE_KEY = 'fbTipDismissed';
+  if (sessionStorage.getItem(STORAGE_KEY)) return;  // don't re-show in same session
+
+  // Auto-show after 8 seconds
+  const autoTimer = setTimeout(() => tip.classList.add('visible'), 8000);
+
+  // Close button
+  close.addEventListener('click', (e) => {
+    e.preventDefault();
+    tip.classList.remove('visible');
+    sessionStorage.setItem(STORAGE_KEY, '1');
+    clearTimeout(autoTimer);
+  });
+
+  // Clicking feedback tab hides tooltip
+  tab.addEventListener('click', () => {
+    tip.classList.remove('visible');
+    sessionStorage.setItem(STORAGE_KEY, '1');
+  });
+
+  // Hide on outside click
+  document.addEventListener('click', (e) => {
+    if (!tip.contains(e.target) && e.target !== tab) {
+      tip.classList.remove('visible');
+    }
+  });
+}
+
+/* ── Init ─────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   applyChartDefaults();
   renderKPIs();
@@ -360,5 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initNavbar();
   initSlider('age', 'ageDisplay');
-  showToast('Dashboard loaded! 🚢', '⚓', 2500);
+  initFeedbackTooltip();
+  showToast('Dashboard loaded! 🚢', '⦳', 2000);
 });
